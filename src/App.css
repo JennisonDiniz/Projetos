@@ -57,20 +57,20 @@ main, section{
 }
 
 .habit-card{
-  background-color: #472323;
+  background-color: #784214;
   border-radius: 8px;
   padding: 12px 16px;
-  box-shadow: 0 1px 3px rgba(57, 82, 143, 0.1);
+  box-shadow: 0 1px 3px rgba(71, 172, 177, 0.699);
   margin-bottom: 12px;
   margin-right: 33px;
 
 }
 
 .habit-form{
-  background-color : #c05353;
+  background-color: #784214;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(57, 75, 116, 0.1);
+  box-shadow: 0 1px 3px rgba(64, 98, 180, 0.537);
   margin-bottom: 16px;
 }
 
