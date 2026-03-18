@@ -1,16 +1,48 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import HabitCard from './HabitCard'
 
 function HabitList() {
-  const [habits, setHabits] = useState([
-    { id: 1, nome: 'Exercício',  descricao: 'Treino de força',    meta: 5, ativo: true,  diasFeitos: 5 },
-    { id: 2, nome: 'Leitura',    descricao: 'Livro ou artigo',    meta: 7, ativo: true,  diasFeitos: 3 },
-    { id: 3, nome: 'Meditação',  descricao: 'Respiração e foco',  meta: 7, ativo: false, diasFeitos: 0 },
-    { id: 4, nome: 'Hidratação', descricao: 'Beber 2L de água',   meta: 7, ativo: true,  diasFeitos: 6 },
-  ])
+  const [habits, setHabits] = useState(() => {
+// Esta função executa UMA VEZ — na montagem
+const stored = localStorage.getItem('my-daily-habits')
+// Se não há nada salvo — usa o array inicial
+if (!stored) return [
+{ id: 1, nome:'Exercício', descricao: 'Treino de força', meta: 5,
+ativo: true, diasFeitos: 5 },
+{ id: 2, nome: 'Leitura', descricao: 'Livro ou artigo', meta: 7,
+ativo: true, diasFeitos: 3 },
+{ id: 3, nome: 'Meditação', descricao: 'Respiração e foco', meta: 7,
+ativo: false, diasFeitos: 0 },
+{ id: 4, nome: 'Hidratação', descricao: 'Beber 2L de água', meta: 7,
+ativo: true, diasFeitos: 6 },
+]
+// Se há dados salvos — tenta fazer o parse
+try {
+	return JSON.parse(stored)
+} catch {
+// Se o JSON estiver corrompido — volta pro array inicial
+return []
+}
+})
+
+     useEffect(() => {
+    localStorage.setItem('my-daily-habits', JSON.stringify(habits))
+    }, [habits])
+
+    const [erroNome, setErroNome] = useState('')
+    const nomeInputRef = useRef(null)
+
     const [novoNome,      setNovoNome]      = useState('')
     const [novaDescricao, setNovaDescricao] = useState('')
     const [novaCategoria, setNovaCategoria] = useState('')
+
+    const handleChange = (e) => {
+    const { name, value } = e.target
+// [name] é uma chave dinâmica — usa o valor de name como nome da propriedade
+      if (name === 'novoNome') setNovoNome(value)
+      if (name === 'novaDescricao') setNovaDescricao(value)
+      if (name === 'novaCategoria') setNovaCategoria(value)
+      }
 
    const removerHabit = (id) => {
     setHabits(habits.filter(habit => habit.id !== id))
@@ -33,13 +65,18 @@ function HabitList() {
     categoria: novaCategoria || 'Geral',
   }
 
-  setHabits([...habits, novoHabit])
+  setHabits(prev => [...habits, novoHabit])
 
   // Limpar os campos após adicionar
   setNovoNome('')
   setNovaDescricao('')
   setNovaCategoria('')
+  // Devolve o foco para o campo nome — useRef em ação
+  nomeInputRef.current?.focus()
+
 }
+
+  const totalHabitos = habits.length
 
   return (
   <section>
@@ -49,9 +86,11 @@ function HabitList() {
           Nome do hábito *
           <input
             type="text"
+            name="novoNome"
             value={novoNome}
-            onChange={(e) => setNovoNome(e.target.value)}
-          />
+            onChange={handleChange}
+            ref={nomeInputRef}
+           />
         </label>
       </div>
       <div>
@@ -59,11 +98,11 @@ function HabitList() {
           Descrição
           <input
             type="text"
-            value={novaDescricao}
-
-
-onChange={(e) => setNovaDescricao(e.target.value)}
-          />
+            name="novoNome"
+            value={novoNome}
+            onChange={handleChange}
+            ref={nomeInputRef}
+           />
         </label>
       </div>
       <div>
@@ -71,9 +110,11 @@ onChange={(e) => setNovaDescricao(e.target.value)}
           Categoria
           <input
             type="text"
-            value={novaCategoria}
-            onChange={(e) => setNovaCategoria(e.target.value)}
-          />
+            name="novoNome"
+            value={novoNome}
+            onChange={handleChange}
+            ref={nomeInputRef}
+           />
         </label>
       </div>
       <button type="submit">Adicionar hábito</button>

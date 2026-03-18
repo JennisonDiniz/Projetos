@@ -23,7 +23,7 @@ function App() {
         titulo='My Daily Habits'
         descricao='Construindo uma rotina melhor, um hábito por vez.'
         />
-      <BemVindo nomeUsuario="turma iteam" totalHabitos={55}/>
+      <BemVindo nomeUsuario="turma iteam" totalHabitos={habits.length}/>
       <SecaoHabitos titulo="Meus Hábitos">
         <HabitList habits={habits}/>
       </SecaoHabitos>
