@@ -16,6 +16,7 @@ ativo: false, diasFeitos: 0 },
 { id: 4, nome: 'Hidratação', descricao: 'Beber 2L de água', meta: 7,
 ativo: true, diasFeitos: 6 },
 ]
+  
 // Se há dados salvos — tenta fazer o parse
 try {
 	return JSON.parse(stored)
@@ -38,22 +39,34 @@ return []
 
     const handleChange = (e) => {
     const { name, value } = e.target
-// [name] é uma chave dinâmica — usa o valor de name como nome da propriedade
-      if (name === 'novoNome') setNovoNome(value)
-      if (name === 'novaDescricao') setNovaDescricao(value)
-      if (name === 'novaCategoria') setNovaCategoria(value)
-      }
-
+    if (name === 'novoNome') {
+  setNovoNome(value)
+// Valida comprimento mínimo em tempo real
+  if (value.length > 0 && value.length < 3) {
+  setErroNome('O nome deve ter pelo menos 3 caracteres.')
+  } 
+    else {
+  setErroNome('')
+    }
+  }
+if (name === 'novaDescricao') setNovaDescricao(value)
+if (name === 'novaCategoria') setNovaCategoria(value)
+  }
    const removerHabit = (id) => {
     setHabits(habits.filter(habit => habit.id !== id))
   }
     const adicionarHabit = (event) => {
-  event.preventDefault()
+    event.preventDefault()
 
   if (!novoNome.trim()) {
     alert('Informe um nome para o hábito.')
     return
   }
+  // Bloqueia se há erro de validação
+    if (erroNome) {
+  nomeInputRef.current?.focus()
+    return
+      }
 
   const novoHabit = {
     id: Date.now(),
@@ -82,16 +95,17 @@ return []
   <section>
     <form onSubmit={adicionarHabit} className="habit-form">
       <div>
-        <label>
+      <label>
           Nome do hábito *
-          <input
-            type="text"
-            name="novoNome"
-            value={novoNome}
-            onChange={handleChange}
-            ref={nomeInputRef}
-           />
+        <input
+        type="text"
+        name="novoNome"
+        value={novoNome}
+        onChange={handleChange}
+        ref={nomeInputRef}
+        />
         </label>
+        {erroNome && <p style={{ color: 'red', fontSize: '0.8rem' }}>{erroNome}</p>}
       </div>
       <div>
         <label>
@@ -99,7 +113,7 @@ return []
           <input
             type="text"
             name="novoNome"
-            value={novoNome}
+            value={novaDescricao}
             onChange={handleChange}
             ref={nomeInputRef}
            />
@@ -111,7 +125,7 @@ return []
           <input
             type="text"
             name="novoNome"
-            value={novoNome}
+            value={novaCategoria}
             onChange={handleChange}
             ref={nomeInputRef}
            />
