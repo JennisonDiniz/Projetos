@@ -16,9 +16,9 @@ return (
 	<div>
   <Header titulo="My Daily Habits" descricao="Construindo uma rotina
   melhor." />
-  <BemVindo nomeUsuario="turma iteam&quot" />
+  <BemVindo nomeUsuario="turma iteam" />
   <SecaoHabitos titulo="Meus Hábitos">
- <HabitList />
+  <HabitList />
   </SecaoHabitos>
   <Footer />
   </div>
